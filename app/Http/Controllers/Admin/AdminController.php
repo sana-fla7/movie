@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -13,8 +14,8 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $Admins = Admin::all();
-        return view('Admin.admin.index', compact('Admins'));
+        $admins = Admin::latest()->get();
+        return view('Admin.admins.index', compact('admins'));
     }
 
     /**
@@ -22,7 +23,7 @@ class AdminController extends Controller
      */
     public function create()
     {
-        return view('Admin.admin.create');
+        //
     }
 
     /**
@@ -31,19 +32,15 @@ class AdminController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'fullname' => ['required' ,'string', 'min:3'],
-            'username' => ['required' ,'string', 'min:3', 'unique:admins'],
-            'password' => ['required','string', 'min:4'],
-            'email' => ['required' , 'string','min:3','unique:admins'],
-            'phone' => ['required' ,'string', 'min:3', 'unique:admins', ],
+            'fullname' => ['required', 'string', 'min:3', 'max:255'],
+            'username' => ['required', 'string', 'min:3', 'max:255', 'unique:admins,username'],
+            'email'    => ['required', 'email', 'max:255', 'unique:admins,email'],
+            'phone'    => ['nullable', 'digits_between:8,20', 'unique:admins,phone'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
-        Admin::create([
-            'fullname' => $validated['fullname'] ,
-            'username' => $validated['username'] ,
-            'password' => $validated['password'] ,
-            'email' => $validated['email'] ,
-            'phone' => $validated['phone'] ,
-        ]);
+        $validated['password'] = Hash::make($validated['password']);
+        Admin::create($validated);
+        return redirect()->route('admins.index')->with('status', 'مدیر با موفقیت ایجاد شد.');
     }
 
     /**
@@ -51,7 +48,7 @@ class AdminController extends Controller
      */
     public function show(string $id)
     {
-
+        //
     }
 
     /**
@@ -59,8 +56,7 @@ class AdminController extends Controller
      */
     public function edit(string $id)
     {
-        $Admins = Admin::all();
-        return view('Admin.admin.index', compact('Admins'));
+        //
     }
 
     /**
@@ -68,16 +64,21 @@ class AdminController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $Admins = Admin::findOrFail($id);
-
+        $admin = Admin::findOrFail($id);
         $validated = $request->validate([
-            'fullname' => ['required' ,'string', 'min:3'],
-            'username' => ['required' ,'string', 'min:3', 'unique:admins'],
-            'password' => ['required','string', 'min:4'],
-            'email' => ['required' , 'string','min:3','unique:admins'],
-            'phone' => ['required' ,'string', 'min:3', 'unique:admins', ],
+            'fullname' => ['required', 'string', 'min:3', 'max:255'],
+            'username' => ['required', 'string', 'min:3', 'max:255', 'unique:admins,username,' . $admin->id],
+            'email'    => ['required', 'email', 'max:255', 'unique:admins,email,' . $admin->id],
+            'phone'    => ['nullable', 'digits_between:8,20', 'unique:admins,phone,' . $admin->id],
+            'password' => ['nullable', 'string', 'min:6', 'confirmed'],
         ]);
-        $Admins->update($validated);
+        if (!empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+        $admin->update($validated);
+        return redirect()->route('admins.index')->with('status', 'مدیر با موفقیت به‌روزرسانی شد.');
     }
 
     /**
@@ -85,6 +86,7 @@ class AdminController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Admin::findOrFail($id)->delete();
+        return redirect()->route('admins.index')->with('status', 'مدیر با موفقیت حذف شد.');
     }
 }

@@ -6,9 +6,13 @@ use App\Http\Controllers\Admin\CastController;
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CategoryNewsController;
+use App\Http\Controllers\Admin\CollectionController;
+use App\Http\Controllers\Admin\MovieController;
+use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\SettingsController;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -31,4 +35,7 @@ Route::resource('/Admin/settings', SettingsController::class)->names('settings')
 Route::resource('/Admin/admins', AdminController::class)->names('admins');
 Route::resource('/Admin/casts', CastController::class)->names('casts');
 Route::resource('/Admin/tags', TagController::class)->names('tags');
+Route::resource('/Admin/movies', MovieController::class)->names('movies');
+Route::resource('/Admin/news', NewsController::class)->names('news');
+Route::resource('/Admin/collection', CollectionController::class)->names('collection');
 require __DIR__.'/auth.php';

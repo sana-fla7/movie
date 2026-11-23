@@ -49,18 +49,18 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="index.html" class="menu-link">
-                        <div data-i18n="Analytics">Analytics</div>
+                    <a href="{{route('movies.index')}}" class="menu-link">
+                        <div data-i18n="MOVIE">MOVIE</div>
                     </a>
                 </li>
                 <li class="menu-item active">
-                    <a href="dashboards-crm.html" class="menu-link">
-                        <div data-i18n="CRM">CRM</div>
+                    <a href="{{route('casts.index')}}" class="menu-link">
+                        <div data-i18n="CASTS">CASTS</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="app-ecommerce-dashboard.html" class="menu-link">
-                        <div data-i18n="eCommerce">eCommerce</div>
+                    <a href="{{route('categories.index')}}" class="menu-link">
+                        <div data-i18n="CATEGORY">CATEGORY</div>
                     </a>
                 </li>
                 <li class="menu-item">
