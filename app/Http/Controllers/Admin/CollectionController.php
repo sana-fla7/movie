@@ -6,82 +6,95 @@ use App\Http\Controllers\Controller;
 use App\Models\Movie;
 use Illuminate\Http\Request;
 use App\Models\Collection;
-use Illuminate\Support\Facades\Storage;
+
+
 
 class CollectionController extends Controller
 {
-    public function index()
-    {
-        $collections = Collection::with('movie')
-            ->latest()
-            ->paginate(15);
 
-        return view('Admin.collection.index', compact('collections'));
+
+        public function index()
+    {
+        $collections = Collection::all();
+
+        return view("Admin.collections.index", compact('collections'));
     }
 
+
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
-        $movies = Movie::orderBy('title')->get();
-        return view('Admin.collection.create', compact('movies'));
+        $movies = Movie::all();
+        return view("Admin.collections.create", compact('movies'));
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title'    => ['required', 'string', 'min:2', 'max:255'],
-            'movie_id' => ['required', 'exists:movies,id'],
-            'image'    => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:4096'],
+            'title' => ['required' , 'min:3'],
+            'movie_id' => ['required'],
+            'image' => ['mimes:jpg,jpeg,png'],
         ]);
-
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('collection/images', 'public');
-        }
-
-        Collection::create($validated);
-
-        return redirect()
-            ->route('collection.index')
-            ->with('status', 'کالکشن با موفقیت ایجاد شد.');
+        $path=$request->file('image')->store('image' , 'public');
+        Collection::create([
+            'title' => $validated['title'] ,
+            'movie_id' => $validated['movie_id'],
+            'image' => $path,
+        ]);
+        return redirect('Admin/collection/')->with('status', 'با موفقیت ثبت شد.');
     }
 
-    public function edit(Collection $collection)
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
     {
-        $movies = Movie::orderBy('title')->get();
-        return view('Admin.collection.update', compact('collection', 'movies'));
+        //
     }
 
-    public function update(Request $request, Collection $collection)
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
     {
+        $collections = Collection::findOrFail($id);
+        $movies = Movie::all();
+
+        return view("Admin.collections.edit", compact('collections', 'movies'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        $collections = Collection::findOrFail($id);
         $validated = $request->validate([
-            'title'    => ['required', 'string', 'min:2', 'max:255'],
-            'movie_id' => ['required', 'exists:movies,id'],
-            'image'    => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:4096'],
+            'title' => ['required' , 'min:3'],
+            'movie_id' => ['required'],
+            'image' => ['mimes:jpg,jpeg,png'],
         ]);
 
-        if ($request->hasFile('image')) {
-            if ($collection->image && Storage::disk('public')->exists($collection->image)) {
-                Storage::disk('public')->delete($collection->image);
-            }
-            $validated['image'] = $request->file('image')->store('collection/images', 'public');
+        if($request->file('image') !== null){
+            $validated["image"]=$request->file('image')->store('image' , 'public');
         }
-
-        $collection->update($validated);
-
-        return redirect()
-            ->route('collection.index')
-            ->with('status', 'کالکشن با موفقیت به‌روزرسانی شد.');
+        $collections->update($validated);
+        return redirect('Admin/collection/')->with('status', 'با موفقیت ویرایش شد.');
     }
-
-    public function destroy(Collection $collection)
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
     {
-        if ($collection->image && Storage::disk('public')->exists($collection->image)) {
-            Storage::disk('public')->delete($collection->image);
-        }
-
-        $collection->delete();
-
-        return redirect()
-            ->route('collection.index')
-            ->with('status', 'کالکشن با موفقیت حذف شد.');
+        Collection::findOrFail($id)->delete();
+        return redirect()->route('collection.index')->with('status', 'کالکشن با موفقیت حذف شد.');
     }
 }
+
+
+

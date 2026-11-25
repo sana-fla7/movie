@@ -20,6 +20,8 @@
                     <th>عنوان</th>
                     <th>دسته‌بندی</th>
                     <th>نویسنده</th>
+                    <th>توضیحات</th>
+                    <th>محتوا</th>
                     <th>وضعیت</th>
                     <th>تاریخ</th>
                     <th>عملیات</th>
@@ -41,7 +43,9 @@
                         </td>
                         <td><span class="fw-medium">{{ $item->title }}</span></td>
                         <td>{{ $item->category->title ?? '—' }}</td>
-                        <td>{{ $item->admin->full_name ?? $item->admin->name ?? '—' }}</td>
+                        <td>{{ $item->admin->fullname ?? $item->admin->name ?? '—' }}</td>
+                        <td>{{ $item->description }}</td>
+                        <td>{{ $item->content }}</td>
                         <td>
                             @if($item->status)
                                 <span class="badge bg-label-success">فعال</span>
@@ -80,8 +84,5 @@
             </table>
         </div>
 
-        <div class="p-3">
-            {{ $news->links() }}
-        </div>
     </div>
 @endsection

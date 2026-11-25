@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Collection extends Model
 {
-    protected $fillable = ['title' ,'movie-id', "image" ];
+    protected $table = 'collection';
+    protected $fillable = ['title' ,'movie_id', "image" ];
 
     public function movies()
     {

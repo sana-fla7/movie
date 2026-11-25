@@ -64,13 +64,13 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="app-logistics-dashboard.html" class="menu-link">
-                        <div data-i18n="Logistics">Logistics</div>
+                    <a href="{{route('news.index')}}" class="menu-link">
+                        <div data-i18n="NEWS">NEWS</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="app-academy-dashboard.html" class="menu-link">
-                        <div data-i18n="Academy">Academy</div>
+                    <a href="{{route('collection.index')}}" class="menu-link">
+                        <div data-i18n="COLLECTIONS">COLLECTIONS</div>
                     </a>
                 </li>
             </ul>

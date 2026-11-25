@@ -23,7 +23,7 @@ class AdminController extends Controller
      */
     public function create()
     {
-        //
+        return view('Admin.admins.create');
     }
 
     /**
@@ -56,7 +56,9 @@ class AdminController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $admin = Admin::findOrFail($id);
+
+        return view('Admin.admins.edit', compact('admin'));
     }
 
     /**
