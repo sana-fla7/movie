@@ -35,7 +35,7 @@
                             @if($item->logo)
                                 <img src="{{ asset('storage/' . $item->logo) }}"
                                      width="50" height="50"
-                                     style="object-fit: cover;">
+                                     style="object-fit: cover;" alt="">
                             @else
                                 بدون لوگو
                             @endif

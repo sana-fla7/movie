@@ -73,7 +73,7 @@
                             <div class="mb-2">
                                 <img src="{{ asset('storage/' . $setting->logo) }}"
                                      width="100" height="100"
-                                     style="object-fit: cover;">
+                                     style="object-fit: cover;" alt="">
                             </div>
                         @else
                             <p>لوگویی ثبت نشده است.</p>
