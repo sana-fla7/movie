@@ -73,6 +73,11 @@
                         <div data-i18n="COLLECTIONS">COLLECTIONS</div>
                     </a>
                 </li>
+                <li class="menu-item">
+                    <a href="{{route('comments.index')}}" class="menu-link">
+                        <div data-i18n="COMMENTS">COMMENTS</div>
+                    </a>
+                </li>
             </ul>
         </li>
 
